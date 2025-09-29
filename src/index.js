@@ -4,25 +4,27 @@
 // syntax for this is 
 // require('dotenv').config({path:'./env'})
 
-
-// we need to import dotenv to use variable names
-// modular approach best approach in modules
 import dotenv from 'dotenv'
 
 // import mongoose from 'mongoose';
 // import { DB_NAME } from './constants';
 import connectDB from './db/index.js';
-
-
 // config of dotenv file 
 dotenv.config({
     path:'./env'
 })
 
 
-// second approach
-// simply connect the mongodb in db file to keep our index file clean and easily understandable not bulky hence we simply import it from db file and run that function
-connectDB();
+connectDB()
+.then(()=>{
+    app.listen(process.env.PORT || 8000 ,()=>{
+        console.log(`server is listening on port ${process.env.PORT}`)
+    });
+})
+.catch((err)=>{
+    console.log("database connection failed",err)
+})
+
 
 
 
