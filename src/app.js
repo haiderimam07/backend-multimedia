@@ -14,5 +14,11 @@ app.use(express.urlencoded({extended:"true", limit:"16Kb"}))
 app.use(express.static("public"))
 // publicly available file like images and things like that
 
+// import router in app.js
+import userRouter from "./routes/user.router.js"
+
+app.use("/api/v1/users", userRouter)
+
+
 app.use(cookieParser())
 export {app}
