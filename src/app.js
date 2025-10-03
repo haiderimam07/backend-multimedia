@@ -15,7 +15,7 @@ app.use(express.static("public"))
 // publicly available file like images and things like that
 
 // import router in app.js
-import userRouter from "./routes/user.router.js"
+import userRouter from "./routes/user.routes.js"
 
 app.use("/api/v1/users", userRouter)
 
