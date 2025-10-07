@@ -16,14 +16,15 @@ const registerUser=asyncHandler( async (req,res)=>{
     // check for user creation and return response
     const {fullname , email, username, password}=req.body
 
-    console.log(fullname,email)
+    // console.log(fullname,email)
+    
     //the data that comes form the user we need to check if all necessary fields are present or not
     // we can check it by simple if condition ans check manually for each field 
     // there is new much more profeeesional approach
     if([fullname, email, username,password].some((field)=> field?.trim()==="")){
         throw new ApiError(400, "All fields are mandotary")
     }
-    const existedUser=User.findOne({
+    const existedUser=await User.findOne({
         $or:[{username},{email}]
     })
     if(existedUser){
@@ -32,7 +33,13 @@ const registerUser=asyncHandler( async (req,res)=>{
 
     // check for images
     const avatarLocalPath=req.files?.avatar[0]?.path
-    const coverImageLocalPath=req.files?.coverImage?.path
+    // const coverImageLocalPathreq.file?.coverImage[0]?.path
+    // alternative better approach as it is manually checking if coverImage is uploaded or not
+    // check if coverImage is uploaded or not if not then we simply do not upload on cloudinary
+    let coverImageLocalPath;
+    if(req.files && (Array.isArray(req.files.coverImage)) && (req.files.coverImage.length>0)){
+        coverImageLocalPath=req.files.coverImage[0].path
+    }
 
     if(!avatarLocalPath){
         throw new ApiError(400,"avatar is required")
@@ -77,9 +84,9 @@ const registerUser=asyncHandler( async (req,res)=>{
     )
 
 
-    res.status(200).json({
-        message:"ok"
-    })
+    // res.status(200).json({
+    //     message:"ok"
+    // })
 })
 
 export {registerUser}
